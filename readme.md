@@ -85,7 +85,7 @@ _Notebook created: January 9, 2019_.
 4. **Fourier transforms** - Along with the daily closing price, we will create Fourier transforms in order to generalize several long- and short-term trends. Using these transforms we will eliminate a lot of noise (random walks) and create approximations of the real stock movement. Having trend approximations can help the LSTM network pick it's prediction trends more accurately.
 5. **Autoregressive Integrated Moving Average** (ARIMA) - This was one of the most popular techniques for predicting future values of time series data (in the pre-neural networks ages). Let's add it and see if it comes off as an important predictive feature.
 6. **Stacked autoencoders** - most of the aforementioned features (fundamental analysis, technical analysis, etc) were found by people after decades of research. But maybe we have missed something. Maybe there are hidden correlations that people cannot comprehend due to the enormous amount of data points, events, assets, charts, etc. With stacked autoencoders (type of neural networks) we can use the power of computers and probably find new types of features that affect stock movements. Even though we will not be able to understand these features in human language, we will use them in the GAN.
-7. **Deep Unsupervised learning for anomaly detection in options pricing**. _Explained later in section XXX_.
+7. **Deep Unsupervised learning for anomaly detection in options pricing**.
 
 Next, having so many features, we need to perform a couple of important steps:
 1. Perform statistical checks for the 'quality' of the data. If the data we create if flawed, then no matter how sophisticated our algorithms are, the results will not be positive. The checks include making sure the data does not suffer from heteroskedasticity, multicollinearity, or serial correlation.
@@ -459,7 +459,7 @@ plot_technical_indicators(dataset_TI_df, 400)
 
 ## 3.3. Fundamental analysis <a class="anchor" id="fundamental"></a>
 
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;For fundamental analysis we will perform sentiment analysis on all daily news abou XXX. Using sigmoid the end result will be between 0 and 1. The closer the score is to 0 - the more negative the news is (closer to 1 indicates positive sentiment). For each day, we will create the average daily score (as a number between 0 and 1) and add it as a feature.
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;For fundamental analysis we will perform sentiment analysis on all daily news about GS. Using sigmoid the end result will be between 0 and 1. The closer the score is to 0 - the more negative the news is (closer to 1 indicates positive sentiment). For each day, we will create the average daily score (as a number between 0 and 1) and add it as a feature.
 
 ### 3.3.1. Bidirectional Embedding Representations from Transformers - BERT <a class="anchor" id="bidirnlp"></a>
 
