@@ -88,8 +88,8 @@ _Notebook created: January 9, 2019_.
 7. **Deep Unsupervised learning for anomaly detection in options pricing**. We will use one more feature - for every day we will add the price for 90-days call option on Goldman Sachs stock. Options pricing itself combines a lot of data. The price for options contract depends on the future value of the stock (analysts try to also predict the price in order to come up with the most accurate price for the call option). Using deep unsupervised learning (**Self-organized Maps**) we will try to spot anomalies in every day's pricing. Anomaly (such as a drastic change in pricing) might indicate an event that might be useful for the LSTM to learn the overall stock pattern.
 
 Next, having so many features, we need to perform a couple of important steps:
-1. Perform statistical checks for the 'quality' of the data. If the data we create if flawed, then no matter how sophisticated our algorithms are, the results will not be positive. The checks include making sure the data does not suffer from heteroskedasticity, multicollinearity, or serial correlation.
-2. Create feature importance. If a feature (e.g. another stock or a technical indicator) has no explanatory power to the stock we want to predict, then there no need for us to use it in the training of the neural nets. We will using **XGBoost** (eXtreme Gradient Boosting), a type of boosted tree regression algorithms.
+1. Perform statistical checks for the 'quality' of the data. If the data we create is flawed, then no matter how sophisticated our algorithms are, the results will not be positive. The checks include making sure the data does not suffer from heteroskedasticity, multicollinearity, or serial correlation.
+2. Create feature importance. If a feature (e.g. another stock or a technical indicator) has no explanatory power to the stock we want to predict, then there is no need for us to use it in the training of the neural nets. We will using **XGBoost** (eXtreme Gradient Boosting), a type of boosted tree regression algorithms.
 
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;As a final step of our data preparation, we will also create **Eigen portfolios** using Principal Component Analysis (**PCA**) in order to reduce the dimensionality of the features created from the autoencoders.
 
@@ -240,8 +240,8 @@ print('Number of training days: {}. Number of test days: {}.'.format(num_trainin
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;So what other assets would affect GS's stock movements? Good understanding of the company, its lines of businesses, competitive landscape, dependencies, suppliers and client type, etc is very important for picking the right set of correlated assets:
 - First are the **companies** similar to GS. We will add JPMorgan Chace and Morgan Stanley, among others, to the dataset.
 - As an investment bank, Goldman Sachs depends on the **global economy**. Bad or volatile economy means no M&As or IPOs, and possibly limited proprietary trading earnings. That is why we will include global economy indices. Also, we will include LIBOR (USD and GBP denominated) rate, as possibly shocks in the economy might be accounted for by analysts to set these rates, and other **FI** securities.
-- Daily volatility index (**VIX**) - for the reason described in the previous section.
-- **Composite indices** - such NASDAQ and NYSE (from USA), FTSE100 (UK), Nikkei225 (Japan), Hang Seng and BSE Sensex (APAC) indices.
+- Daily volatility index (**VIX**) - for the reason described in the previous point.
+- **Composite indices** - such as NASDAQ and NYSE (from USA), FTSE100 (UK), Nikkei225 (Japan), Hang Seng and BSE Sensex (APAC) indices.
 - **Currencies** - global trade is many times reflected into how currencies move, ergo we'll use a basket of currencies (such as USDJPY, GBPUSD, etc) as features.
 
 #### Overall, we have 72 other assets in the dataset - daily price for every asset.
@@ -459,7 +459,7 @@ plot_technical_indicators(dataset_TI_df, 400)
 
 ## 3.3. Fundamental analysis <a class="anchor" id="fundamental"></a>
 
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;For fundamental analysis we will perform sentiment analysis on all daily news about GS. Using sigmoid the end result will be between 0 and 1. The closer the score is to 0 - the more negative the news is (closer to 1 indicates positive sentiment). For each day, we will create the average daily score (as a number between 0 and 1) and add it as a feature.
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;For fundamental analysis we will perform sentiment analysis on all daily news about GS. Using sigmoid at the end, result will be between 0 and 1. The closer the score is to 0 - the more negative the news is (closer to 1 indicates positive sentiment). For each day, we will create the average daily score (as a number between 0 and 1) and add it as a feature.
 
 ### 3.3.1. Bidirectional Embedding Representations from Transformers - BERT <a class="anchor" id="bidirnlp"></a>
 
@@ -473,13 +473,15 @@ plot_technical_indicators(dataset_TI_df, 400)
 import bert
 ```
 
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Going into the details of BERT and the NLP part is not in the scope of this notebook, but you have interest, do let me know - I will create a new repo only for BERT as it definitely is quite promissing when it comes to language processing tasks.
+
 ## 3.4. Fourier transforms for trend analysis <a class="anchor" id="fouriertransform"></a>
 
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;**Fourier transforms** take a function and create a series of sine waves (with different amplitudes and frames). When combined, these sine waves approximate the original function. Mathematically speaking, the transforms look like this:
 
 $$G(f) = \int_{-\infty}^\infty g(t) e^{-i 2 \pi f t} dt$$
 
-We will Fourier transforms to extract global and local trends in the GS stock, and to also denoise it a little. So let's see how it works.
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;We will use Fourier transforms to extract global and local trends in the GS stock, and to also denoise it a little. So let's see how it works.
 
 
 ```python
@@ -510,7 +512,7 @@ plt.show()
 ```
 
 
-![png](output_44_0.png)
+![png](output_45_0.png)
 
 
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;As you see in Figure 3 the more components from the Fourier transform we use the closer the approximation function is to the real stock price (the 100 components transform is almost identical to the original function - the red and the purple lines almost overlap). We use Fourier transforms for the purpose of extracting long- and short-term trends so we will use the transforms with 3, 6, and 9 components. You can infer that the transform with 3 components serves as the long term trend.
@@ -530,7 +532,7 @@ plt.show()
 ```
 
 
-![png](output_46_0.png)
+![png](output_47_0.png)
 
 
 ## 3.5. ARIMA as a feature <a class="anchor" id="arimafeature"></a>
@@ -588,7 +590,7 @@ plt.show()
 ```
 
 
-![png](output_50_0.png)
+![png](output_51_0.png)
 
 
 
@@ -641,7 +643,7 @@ plt.show()
 ```
 
 
-![png](output_53_0.png)
+![png](output_54_0.png)
 
 
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;As we can see from Figure 5 ARIMA gives a very good approximation of the real stock price. We will use the predicted price through ARIMA as an input feature into the LSTM because, as we mentioned before, we want to capture as many features and patterns about Goldman Sachs as possible. We go test MSE (mean squared error) of 10.151, which by itself is not a bad result (considering we do have a lot of test data), but still we will only use it as a feature in the LSTM.
@@ -739,7 +741,7 @@ plt.show()
 ```
 
 
-![png](output_72_0.png)
+![png](output_73_0.png)
 
 
 
@@ -752,7 +754,7 @@ plt.show()
 ```
 
 
-![png](output_73_0.png)
+![png](output_74_0.png)
 
 
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Not surprisingly (for those with experience in stock trading) that MA7, MACD, and BB are among the important features. 
@@ -811,7 +813,7 @@ plt.show()
 ```
 
 
-![png](output_81_0.png)
+![png](output_82_0.png)
 
 
 **Note**: In future versions of this notebook I will experiment using **U-Net** (<a href="https://arxiv.org/abs/1505.04597">link</a>), and try to utilize the convolutional layer and extract (and create) even more features about the stock's underlying movement patterns. For now, we will just use a simple autoencoder made only from ```Dense``` layers.
@@ -1239,7 +1241,7 @@ plt.show()
 ```
 
 
-![png](output_128_0.png)
+![png](output_129_0.png)
 
 
 ### 4.4.4. How to prevent overfitting and the bias-variance trade-off <a class="anchor" id="preventoverfitting"></a>
@@ -1453,7 +1455,7 @@ plot_prediction('Predicted and Real price - after first epoch.')
 ```
 
 
-![png](output_167_0.png)
+![png](output_168_0.png)
 
 
 2. Plot after 50 epochs.
@@ -1464,7 +1466,7 @@ plot_prediction('Predicted and Real price - after first 50 epochs.')
 ```
 
 
-![png](output_169_0.png)
+![png](output_170_0.png)
 
 
 
@@ -1473,7 +1475,7 @@ plot_prediction('Predicted and Real price - after first 200 epochs.')
 ```
 
 
-![png](output_170_0.png)
+![png](output_171_0.png)
 
 
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;The RL run for ten episodes (we define an eposide to be one full GAN training on the 200 epochs.)
@@ -1484,7 +1486,7 @@ plot_prediction('Final result.')
 ```
 
 
-![png](output_172_0.png)
+![png](output_173_0.png)
 
 
 #### As a next step, I will try to take everything separately and provide some analysis on what worked and why. Why did we receive these results and is it just by coinscidence? So stay tuned.
