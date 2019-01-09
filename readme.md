@@ -4,15 +4,15 @@
  
 
 
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;In this noteboook I will create a complete process for predicting stock price movements. Follow along and we will achieve some pretty good results. For that purpose we will use a **Generative Adversarial Network** (GAN) with **LSTM**, a type of Recurrent Neural Network, as generator, and a Convolutional Neural Network, **CNN**, as a discriminator. We use LSTM for the obvious reason that we are trying to predict time series data. Why we use GAN and specifically CNN as a discriminator? That is a good question: there are special sections on that later.
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;In this notebook I will create a complete process for predicting stock price movements. Follow along and we will achieve some pretty good results. For that purpose we will use a **Generative Adversarial Network** (GAN) with **LSTM**, a type of Recurrent Neural Network, as generator, and a Convolutional Neural Network, **CNN**, as a discriminator. We use LSTM for the obvious reason that we are trying to predict time series data. Why we use GAN and specifically CNN as a discriminator? That is a good question: there are special sections on that later.
 
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;We will go into greater details for each step, of course, but the most difficult part is the GAN: very tricky part of successfully training a GAN is getting the right set of hyperparameters. For that reason we will use **Bayesian optimisation** (along with Gaussian processes) and **Reinforcement learning** (RL) for deciding when and how to change the GAN's hyperparamenets (the exploration vs. exploitation dillema). In creating the reinforcement learning we will use the most recent advancements in the field, such as **Rainbow** and **PPO**.
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;We will go into greater details for each step, of course, but the most difficult part is the GAN: very tricky part of successfully training a GAN is getting the right set of hyperparameters. For that reason we will use **Bayesian optimisation** (along with Gaussian processes) and **Reinforcement learning** (RL) for deciding when and how to change the GAN's hyperparameters (the exploration vs. exploitation dilemma). In creating the reinforcement learning we will use the most recent advancements in the field, such as **Rainbow** and **PPO**.
 
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;We will use a lot of different types of input data. Along with the stock's historical trading data and technical indicators, we will use the newest advancements in **NLP** (using 'Bidirectional Embedding Representations from Transformers', **BERT**, sort of a transfer learning for NLP) to create sentiment analysis (as a source for fundamental analysis), **Fourier transforms** for extracting overall trend directions, **Stacked autoencoders** for identifying other high-level features, **Eigen portfolios** for finding correlated assets, autoregressive integrated moving average (**ARIMA**) for the stock function approximation, and many more, in order to capture as much information, patterns, dependencies, etc, as possible about the stock. As we all know, the more (data) the merrier. Predicting stock price movements is an extremely complex task, so the more we know about the stock (from different perspectives) the higher our changes are.
 
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;For the purpose of creating all neural nets we will use MXNet and it's high-level API - Gluon, and train them on multiple GPUs.
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;For the purpose of creating all neural nets we will use MXNet and its high-level API - Gluon, and train them on multiple GPUs.
 
-**Note:** _Altough I try to get into detials of the math and the mechanisms behind almost all algorithms and techniques, this notebook is not explicitly intended to explain how machine/deep learning, or the stock markets, work. The purpose is rather to show how we can use different techniques and algoritms for the purpose of accurately preducting stock price movements, and to also give rationale behind the reason and usefulness of using each technique at each step._
+**Note:** _Although I try to get into details of the math and the mechanisms behind almost all algorithms and techniques, this notebook is not explicitly intended to explain how machine/deep learning, or the stock markets, work. The purpose is rather to show how we can use different techniques and algorithms for the purpose of accurately predicting stock price movements, and to also give rationale behind the reason and usefulness of using each technique at each step._
 
 _Notebook created: January 9, 2019_.
 
@@ -26,7 +26,7 @@ _Notebook created: January 9, 2019_.
 * [Acknowledgement](#acknowledgement)
 * [The data](#thedata)
     * [Correlated assets](#corrassets)
-    * [Tecnical indicators](#technicalind)
+    * [Technical indicators](#technicalind)
     * [Fundamental analysis](#fundamental)
         - [Bidirectional Embedding Representations from Transformers - BERT](#bidirnlp)
     * [Fourier transforms for trend analysis](#fouriertransform)
@@ -82,7 +82,7 @@ _Notebook created: January 9, 2019_.
 2. **Technical indicators** - a lot of investors follow technical indicators. We will include the most popular indicators as independent features. Among them - 7 and 21 days moving average, exponential moving average, momentum, Bollinger bands, MACD.
 3. **Fundamental analysis** - A very important feature indicating whether a stock might move up or down. There are two features that can be used in fundamental analysis: 1) Analysing the company performance using 10-K and 10-Q reports, analysing ROE and P/E, etc (we will not use this), and 2) **News** - potentially news can indicate upcoming events that can potentially move the stock in certain direction. We will read all daily news for Goldman Sachs and extract whether the total sentiment about Goldman Sachs on that day is positive, neutral, or negative (as a score from 0 to 1). As many investors closely read the news and make investment decisions based (partially of course) on news, there is a somewhat high chance that if, say, the news for Goldman Sachs today are extremely positive the stock will surge tomorrow. _One crucial point, we will perform feature importance (meaning how indicative it is for the movement of GS) on absolutely every feature (including this one) later on and decide whether we will use it. More on that later_.<br/>
     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;For the purpose of creating accurate sentiment prediction we will use Neural Language Processing (**NLP**). We will use **BERT** - Google's recently announced NLP approach for transfer learning for sentiment classification stock news sentiment extraction.
-4. **Fourier transforms** - Along with the daily closing price, we will create Fourier transforms in order to generalize several long- and short-term trends. Using these transforms we will eliminate a lot of noise (random walks) and create approximations of the real stock movement. Having trend approximations can help the LSTM network pick it's prediction trends more accurately.
+4. **Fourier transforms** - Along with the daily closing price, we will create Fourier transforms in order to generalize several long- and short-term trends. Using these transforms we will eliminate a lot of noise (random walks) and create approximations of the real stock movement. Having trend approximations can help the LSTM network pick its prediction trends more accurately.
 5. **Autoregressive Integrated Moving Average** (ARIMA) - This was one of the most popular techniques for predicting future values of time series data (in the pre-neural networks ages). Let's add it and see if it comes off as an important predictive feature.
 6. **Stacked autoencoders** - most of the aforementioned features (fundamental analysis, technical analysis, etc) were found by people after decades of research. But maybe we have missed something. Maybe there are hidden correlations that people cannot comprehend due to the enormous amount of data points, events, assets, charts, etc. With stacked autoencoders (type of neural networks) we can use the power of computers and probably find new types of features that affect stock movements. Even though we will not be able to understand these features in human language, we will use them in the GAN.
 7. **Deep Unsupervised learning for anomaly detection in options pricing**. We will use one more feature - for every day we will add the price for 90-days call option on Goldman Sachs stock. Options pricing itself combines a lot of data. The price for options contract depends on the future value of the stock (analysts try to also predict the price in order to come up with the most accurate price for the call option). Using deep unsupervised learning (**Self-organized Maps**) we will try to spot anomalies in every day's pricing. Anomaly (such as a drastic change in pricing) might indicate an event that might be useful for the LSTM to learn the overall stock pattern.
@@ -238,7 +238,7 @@ print('Number of training days: {}. Number of test days: {}.'.format(num_trainin
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;As explained earlier we will use other assets as features, not only GS.
 
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;So what other assets would affect GS's stock movements? Good understanding of the company, its lines of businesses, competitive landscape, dependencies, suppliers and client type, etc is very important for picking the right set of correlated assets:
-- First are the **companies** similar to GS. We will add JPMorgan Chace and Morgan Stanley, among others, to the dataset.
+- First are the **companies** similar to GS. We will add JPMorgan Chase and Morgan Stanley, among others, to the dataset.
 - As an investment bank, Goldman Sachs depends on the **global economy**. Bad or volatile economy means no M&As or IPOs, and possibly limited proprietary trading earnings. That is why we will include global economy indices. Also, we will include LIBOR (USD and GBP denominated) rate, as possibly shocks in the economy might be accounted for by analysts to set these rates, and other **FI** securities.
 - Daily volatility index (**VIX**) - for the reason described in the previous point.
 - **Composite indices** - such as NASDAQ and NYSE (from USA), FTSE100 (UK), Nikkei225 (Japan), Hang Seng and BSE Sensex (APAC) indices.
@@ -246,7 +246,7 @@ print('Number of training days: {}. Number of test days: {}.'.format(num_trainin
 
 #### Overall, we have 72 other assets in the dataset - daily price for every asset.
 
-## 3.2. Tecnical indicators <a class="anchor" id="technicalind"></a>
+## 3.2. Technical indicators <a class="anchor" id="technicalind"></a>
 
 We already covered what are technical indicators and why we use them so let's jump straight to the code. We will create technical indicators only for GS.
 
@@ -671,7 +671,7 @@ print('Total dataset has {} samples, and {} features.'.format(dataset_total_df.s
     Total dataset has 2265 samples, and 112 features.
 
 
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;So, after adding all types of data (the correlated assets, technical indicators, fundamentl analysis, Fourier, and Arima) we have a total of 112 features for the 2,265 days (as mentioned before, however, only 1,585 days are for training data).
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;So, after adding all types of data (the correlated assets, technical indicators, fundamental analysis, Fourier, and Arima) we have a total of 112 features for the 2,265 days (as mentioned before, however, only 1,585 days are for training data).
 
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;We will also have some more features generated from the autoencoders.
 
@@ -771,7 +771,7 @@ Before we proceed to the autoencoders, we'll explore an alternative activation f
 
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;We will use GELU for the autoencoders.
 
-**Note**: The cell below shows the logic behing the math of GELU. It is not the actual implementation as an activation function. I had to implement GELU inside MXNet. If you follow the code and change ```act_type='relu'``` to ```act_type='gelu'``` it will not work, unless you change the implementation of MXNet. Make a pull request on the whole project to access the MXNet implementation of GELU.
+**Note**: The cell below shows the logic behind the math of GELU. It is not the actual implementation as an activation function. I had to implement GELU inside MXNet. If you follow the code and change ```act_type='relu'``` to ```act_type='gelu'``` it will not work, unless you change the implementation of MXNet. Make a pull request on the whole project to access the MXNet implementation of GELU.
 
 
 ```python
@@ -888,7 +888,7 @@ n_latent=2
 n_layers=3 # num of dense layers in encoder and decoder respectively
 n_output=VAE_data.shape[1]-1 
 
-net = VAE(n_hidden=n_hidden, n_latent=n_latent, n_layers=n_layers, n_output=n_output, batch_size=batch_size)
+net = VAE(n_hidden=n_hidden, n_latent=n_latent, n_layers=n_layers, n_output=n_output, batch_size=batch_size, act_type='gelu')
 ```
 
 
@@ -1126,7 +1126,7 @@ $$\text{tanh}(x) = \left[\frac{1-\exp(-2x_1)}{1+\exp(-2x_1)},  \ldots, \frac{1-\
 
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;The LSTM architecture is very simple - one ```LSTM``` layer with 112 input units (as we have 112 features in the dataset) and 500 hidden units, and one ```Dense``` layer with 1 output - the price for every day. The initializer is Xavier and we will use L1 loss (which is mean absolute error loss with L1 regularization - see section 4.4.5. for more info on regularization).
 
-**Note** - In the code you can see we use ```Adam``` (with ```learning rate``` of .01) as an optimizer. Don't pay too much attention on that now - there is a section specially dedicated to explaoin what hyperparameters we use (learning rate is excluded as we have learning rate scheduler - <a href="#lrscheduler">section 4.4.3.</a>) and how we optimize these hyperparaments - <a href="#hyperparams">section 4.6.</a>
+**Note** - In the code you can see we use ```Adam``` (with ```learning rate``` of .01) as an optimizer. Don't pay too much attention on that now - there is a section specially dedicated to explain what hyperparameters we use (learning rate is excluded as we have learning rate scheduler - <a href="#lrscheduler">section 4.4.3.</a>) and how we optimize these hyperparameters - <a href="#hyperparams">section 4.6.</a>
 
 
 ```python
@@ -1171,7 +1171,7 @@ print(lstm_model)
     )
 
 
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;As we can see, the unput of the LSTM are the 112 features (```dataset_total_df.shape[1]```) which then go into 500 neurons in the LSTM layer, and then transformed to a single output - the stock price value.
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;As we can see, the input of the LSTM are the 112 features (```dataset_total_df.shape[1]```) which then go into 500 neurons in the LSTM layer, and then transformed to a single output - the stock price value.
 
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;The logic behind the LSTM is: we take 17 (```sequence_length```) days of data (again, the data being the stock price for GS stock every day + all the other feature for that day - correlated assets, sentiment, etc.) and try to predict the 18th day.
 
@@ -1353,7 +1353,7 @@ We will train over 200 ```epochs```.
 
 # 5. Hyperparameters optimization <a class="anchor" id="hyperparams_optim"></a>
 
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;After the GAN trains on the 200 epocgs it will record the MAE (which is the error function in the LSTM, the $G$) and pass it as a reward value to the Reinforcement learning that will decide whether to change the hyperparameters of keep training with the same set of hyperparameters. As described later, this approach is strictly for experimenting with RL.
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;After the GAN trains on the 200 epochs it will record the MAE (which is the error function in the LSTM, the $G$) and pass it as a reward value to the Reinforcement learning that will decide whether to change the hyperparameters of keep training with the same set of hyperparameters. As described later, this approach is strictly for experimenting with RL.
 
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;If the RL decides it will update the hyperparameters it will call Bayesian optimisation (discussed below) library that will give the next best expected set of the hyperparams.
 
@@ -1414,7 +1414,7 @@ where $loss_G$, $accuracy_G$, and $loss_D$ are the Generator's loss and accuracy
 ### 5.1.2. Further work on Reinforcement learning <a class="anchor" id="reinforcementlearning_further"></a>
 
 Some ideas for further exploring reinforcement learning:
-- One of the first things I will introduce next is using **Augmented Random Search** (<a href="https://arxiv.org/pdf/1803.07055.pdf">link</a>) as an alternative algorithm. The authors of the algorithm (out of UC, Berkeley) have managed to achive similar rewards results as other state of the art approaches, such as PPO, but on average 15 times faster.
+- One of the first things I will introduce next is using **Augmented Random Search** (<a href="https://arxiv.org/pdf/1803.07055.pdf">link</a>) as an alternative algorithm. The authors of the algorithm (out of UC, Berkeley) have managed to achieve similar rewards results as other state of the art approaches, such as PPO, but on average 15 times faster.
 - Choosing a reward function is very important. I stated the currently used reward function above, but I will try to play with different functions as an alternative.
 - Using **Curiosity** as an exploration policy.
 - Create **multi-agent** architecture as proposed by Berkeley's AI Research team (BAIR) - <a href="https://bair.berkeley.edu/blog/2018/12/12/rllib/">link</a>.
