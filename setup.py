@@ -16,6 +16,7 @@ setup(name='time_series_modelling',
           "xgboost",
           "matplotlib",
           "mxnet",
-          "seaborn"
+          "seaborn",
+          "statsmodels"
       ]
       )

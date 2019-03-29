@@ -19,12 +19,11 @@ import xgboost as xgb
 
 from time_series_modelling.config import data_path
 from time_series_modelling.plot_utils import plot_raw_price, plot_technical_indicators
+from time_series_modelling.fourier_transforms import fourier_transformation, plot_ft
 warnings.filterwarnings("ignore")
 
 
-def parser(x):
-    return datetime.strptime(x, "%Y-%m-%d")
-    #return datetime.strptime(x, "%m/%d/%Y")
+
 
 
 def get_technical_indicators(dataset, target_col):
@@ -49,6 +48,9 @@ def get_technical_indicators(dataset, target_col):
     return dataset
 
 
+
+
+
 if __name__ == "__main__":
     context = mx.cpu()
     model_ctx = mx.cpu()
@@ -70,4 +72,8 @@ if __name__ == "__main__":
     dataset_TI_df = get_technical_indicators(dataset_ex_df, "Close")
     print(dataset_TI_df.head())
 
-    plot_technical_indicators(dataset_TI_df, 400, target_col="Close")
+    #plot_technical_indicators(dataset_TI_df, 400, target_col="Close")
+
+    data_FT = dataset_ex_df[["Date", "Close"]]
+    fft_df = fourier_transformation(data_FT, target_column="Close")
+    plot_ft(fft_df, data_FT, target_column="Close")
