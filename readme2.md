@@ -473,7 +473,7 @@ plot_technical_indicators(dataset_TI_df, 400)
 import bert
 ```
 
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Going into the details of BERT and the NLP part is not in the scope of this notebook, but you have interest, do let me know - I will create a new repo only for BERT as it definitely is quite promissing when it comes to language processing tasks.
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Going into the details of BERT and the NLP part is not in the scope of this notebook, but you have interest, do let me know - I will create a new repo only for BERT as it definitely is quite promising when it comes to language processing tasks.
 
 ## 3.4. Fourier transforms for trend analysis <a class="anchor" id="fouriertransform"></a>
 
@@ -656,7 +656,7 @@ plt.show()
 
 - **Conditional Heteroskedasticity** occurs when the error terms (the difference between a predicted value by a regression and the real value) are dependent on the data - for example, the error terms grow when the data point (along the x-axis) grow.
 - **Multicollinearity** is when error terms (also called residuals) depend on each other.
-- **Serial correlation** is when one data (feature) is a formula (or completely depemnds) of another feature.
+- **Serial correlation** is when one data (feature) is a formula (or completely depends) of another feature.
 
 We will not go into the code here as it is straightforward and our focus is more on the deep learning parts, **but the data is qualitative**.
 
@@ -1505,7 +1505,7 @@ www.linkedin.com/in/borisbanushev
 
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;**All trading strategies are used at your own risk.**
 
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;There are many many more details to explore - in choosing data features, in choosing algorithms, in tuning the algos, etc. This version of the notebook itself took me 2 weeks to finish. I am sure there are many unaswered parts of the process. So, any comments and suggestion - please do share. I'd be happy to add and test any ideas in the current process.
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;There are many many more details to explore - in choosing data features, in choosing algorithms, in tuning the algos, etc. This version of the notebook itself took me 2 weeks to finish. I am sure there are many unanswered parts of the process. So, any comments and suggestion - please do share. I'd be happy to add and test any ideas in the current process.
 
 Thanks for reading.
 
