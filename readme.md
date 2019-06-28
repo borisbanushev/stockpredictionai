@@ -535,6 +535,7 @@ plt.show()
 ![png](output_47_0.png)
 
 
+
 ## 3.5. ARIMA as a feature <a class="anchor" id="arimafeature"></a>
 
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;**ARIMA** is a technique for predicting time series data. We will show how to use it, and althouth ARIMA will not serve as our final prediction, we will use it as a technique to denoise the stock a little and to (possibly) extract some new patters or features.
