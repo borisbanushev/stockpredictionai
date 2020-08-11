@@ -472,7 +472,6 @@ plot_technical_indicators(dataset_TI_df, 400)
 # just import bert
 import bert
 ```
-
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Going into the details of BERT and the NLP part is not in the scope of this notebook, but you have interest, do let me know - I will create a new repo only for BERT as it definitely is quite promissing when it comes to language processing tasks.
 
 ## 3.4. Fourier transforms for trend analysis <a class="anchor" id="fouriertransform"></a>
