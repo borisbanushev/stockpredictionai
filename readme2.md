@@ -1478,7 +1478,7 @@ plot_prediction('Predicted and Real price - after first 200 epochs.')
 ![png](output_171_0.png)
 
 
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;The RL run for ten episodes (we define an eposide to be one full GAN training on the 200 epochs.)
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;The RL run for ten episodes (We define an eposide to be one full GAN training on the 200 epochs.)
 
 
 ```python
