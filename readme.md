@@ -650,7 +650,7 @@ plt.show()
 
 ## 3.6. Statistical checks <a class="anchor" id="statchecks"></a>
 
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Ensuring that the data has good quality is very important for out models. In order to make sure our data is suitable we will perform a couple of simple checks in order to ensure that the results we achieve and observe are indeed real, rather than compromised due to the fact that the underlying data distribution suffers from fundamental errors.
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Ensuring that the data has good quality is very important for our models. In order to make sure our data is suitable we will perform a couple of simple checks in order to ensure that the results we achieve and observe are indeed real, rather than compromised due to the fact that the underlying data distribution suffers from fundamental errors.
 
 ### 3.6.1. Heteroskedasticity, multicollinearity, serial correlation <a class="anchor" id="hetemultiser"></a>
 
