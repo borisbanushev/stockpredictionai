@@ -14,7 +14,7 @@
 
 **Note:** _Although I try to get into details of the math and the mechanisms behind almost all algorithms and techniques, this notebook is not explicitly intended to explain how machine/deep learning, or the stock markets, work. The purpose is rather to show how we can use different techniques and algorithms for the purpose of accurately predicting stock price movements, and to also give rationale behind the reason and usefulness of using each technique at each step._
 
-_Notebook created: January 9, 2019_.
+
 
 
 **Figure 1 - The overall architecture of our work**
