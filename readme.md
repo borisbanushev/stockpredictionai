@@ -467,7 +467,6 @@ plot_technical_indicators(dataset_TI_df, 400)
 
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Pretrained BERT models are already available in MXNet/Gluon. We just need to instantiated them and add two (arbitrary number) ```Dense``` layers, going to softmax - the score is from 0 to 1.
 
-
 ```python
 # just import bert
 import bert
