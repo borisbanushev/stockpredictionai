@@ -1,4 +1,4 @@
-
+# Need the complete project as a guide to learn ml&dl
 # Using the latest advancements in AI to predict stock market movements
 
  
