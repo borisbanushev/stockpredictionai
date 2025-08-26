@@ -1,0 +1,7 @@
+Thanks for taking the time to share your research with us!  I have learned so much from reading your article and want to go deeper into the GAN and using
+a RL agent to tune the hyperparameters.  Please consider my request to have access to the source code.  
+
+Chris Ruszkowski
+cruszkowski@gmail.com
+
+Thank you!
